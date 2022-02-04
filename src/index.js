@@ -12,17 +12,12 @@ const publicDirectoryPath = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirectoryPath));
 
-let count = 0;
-
 io.on('connection', (socket) => {
   console.log('New Web Socket Connection');
+  socket.emit('welcome message', 'New User');
 
-  socket.emit('countUpdated', count);
-
-  socket.on('increment', () => {
-    count++;
-    // socket.emit('countUpdated', count);
-    io.emit('countUpdated', count);
+  socket.on('sendMessage', (message) => {
+    io.emit('welcome message', message);
   });
 });
 

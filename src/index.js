@@ -26,15 +26,15 @@ io.on('connection', (socket) => {
     io.emit('message', message);
     callback();
   });
-  socket.on('disconnect', (socket) => {
-    io.emit('message', 'A user has left');
-  });
   socket.on('sendLocation', (coords, callback) => {
     io.emit(
-      'message',
+      'locationMessage',
       `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
     );
     callback();
+  });
+  socket.on('disconnect', (socket) => {
+    io.emit('message', 'A user has left');
   });
 });
 

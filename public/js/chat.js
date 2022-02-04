@@ -8,7 +8,13 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const message = e.target.elements.message.value;
-  socket.emit('sendMessage', message);
+  socket.emit('sendMessage', message, (error) => {
+    if (error) {
+      return console.log(error);
+    }
+
+    console.log('Message was delivered');
+  });
 });
 
 document.querySelector('#sendLocation').addEventListener('click', () => {
@@ -17,9 +23,15 @@ document.querySelector('#sendLocation').addEventListener('click', () => {
   }
   navigator.geolocation.getCurrentPosition((position) => {
     // console.log(position);
-    socket.emit('sendLocation', {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    });
+    socket.emit(
+      'sendLocation',
+      {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      },
+      () => {
+        console.log('location shared');
+      }
+    );
   });
 });

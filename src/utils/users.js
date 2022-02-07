@@ -47,33 +47,9 @@ const getUserInRoom = (room) => {
   return users.filter((user) => user.room === room);
 };
 
-module.exports({
+module.exports = {
   addUser,
   removeUser,
   getUser,
   getUserInRoom,
-});
-
-// addUser({
-//   id: 1,
-//   username: 'Ashish',
-//   room: 'test',
-// });
-
-// addUser({
-//   id: 11,
-//   username: 'xyz',
-//   room: 'test',
-// });
-
-// addUser({
-//   id: 111,
-//   username: 'Thakor',
-//   room: 'practice',
-// });
-
-// const user = getUser(11);
-// console.log(user);
-
-// const userList = getUserInRoom('test');
-// console.log(userList);
+};

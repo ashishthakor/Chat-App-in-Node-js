@@ -20,17 +20,27 @@ app.use(express.static(publicDirectoryPath));
 
 io.on('connection', (socket) => {
   console.log('New Web Socket Connection');
-  socket.emit('message', generateMessage('Welcome!'));
-  socket.broadcast.emit('message', generateMessage('A new User has Joined'));
+
+  socket.on('join', ({ username, room }) => {
+    socket.join(room);
+
+    socket.emit('message', generateMessage('Welcome!'));
+    socket.broadcast
+      .to(room)
+      .emit('message', generateMessage(`${username} has joined`));
+  });
 
   socket.on('sendMessage', (message, callback) => {
     const filter = new Filter();
+
     if (filter.isProfane(message)) {
       return callback('Profenity is not allowed');
     }
-    io.emit('message', generateMessage(message));
+
+    io.to('test').emit('message', generateMessage(message));
     callback();
   });
+
   socket.on('sendLocation', (coords, callback) => {
     io.emit(
       'locationMessage',
@@ -40,6 +50,7 @@ io.on('connection', (socket) => {
     );
     callback();
   });
+
   socket.on('disconnect', (socket) => {
     io.emit('message', generateMessage('A user has left'));
   });
